@@ -7,26 +7,23 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      idCounter: 3,
       currentUser: {name: 'Bob'}, 
-      messages: [
-        { id: 1,
-          username: 'Bob',
-          content: 'Has anyone seen my marbles?',
-        },
-        { id: 2,
-          username: 'Anonymous',
-          content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.'
-        }
-      ]
+      messages: []
     }
     this.createMessage = this.createMessage.bind(this);
   }
 
   componentDidMount() {
-    var socket = new WebSocket('ws://localhost:3001');
-    socket.onopen = (event) => {
+    this.socket = new WebSocket('ws://localhost:3001');
+    this.socket.onopen = (event) => {
       console.log("Connected to server");
+    }
+    this.socket.onmessage = (event) => {
+      let newMessages = [];
+      newMessages.push(JSON.parse(event.data));
+      this.setState({
+        messages: newMessages
+      })
     }
   }
 
@@ -43,17 +40,12 @@ class App extends Component {
   }
 
   createMessage = (content) => {
-    const newId = this.state.idCounter+1
     const newMessage = {
-      id: newId,
       username: this.state.currentUser.name,
       content: content
     }
-    let messages = this.state.messages
-    messages.push(newMessage)
-    this.setState({messages: messages,
-    idCounter: newId
-    })
+    this.socket.send(JSON.stringify(newMessage));
   }
 }
+
 export default App;
