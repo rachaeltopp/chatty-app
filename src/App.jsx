@@ -2,15 +2,17 @@ import React, {Component} from 'react';
 import MessageList from './MessageList.jsx'
 import ChatBar from './ChatBar.jsx';
 
-class App extends Component {
+const ANONYMOUS = 'Anonymous';
 
+class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: 'Bob'}, 
+      currentUser: { name: ANONYMOUS }, 
       messages: []
     }
-    this.createMessage = this.createMessage.bind(this);
+
+    this.handleNameChange = this.handleNameChange.bind(this);
   }
 
   componentDidMount() {
@@ -19,32 +21,55 @@ class App extends Component {
       console.log("Connected to server");
     }
     this.socket.onmessage = (event) => {
-      let newMessages = [];
-      newMessages.push(JSON.parse(event.data));
+      const newMessages = this.state.messages.concat(JSON.parse(event.data));
       this.setState({
         messages: newMessages
       })
     }
   }
 
-  render() {
-      return (
-        <div>
-          <nav className="navbar">
-            <a href="/" className="navbar-brand">Chatty</a>
-          </nav>
-          <MessageList messages={this.state.messages}/>
-          <ChatBar currentUser={this.state.currentUser} onNewPost={this.createMessage}/>
-        </div>
-      );
+  handleNameChange(newName) {
+    this.setState({
+      currentUser: { name: newName }
+    });
   }
 
-  createMessage = (content) => {
+  createMessage = (currentUsername, content) => {
+    let username = currentUsername;
+    if (currentUsername === '') {
+      username = ANONYMOUS
+    }
     const newMessage = {
-      username: this.state.currentUser.name,
-      content: content
+      username,
+      content
     }
     this.socket.send(JSON.stringify(newMessage));
+  }
+
+  render() {
+    // assigning state to local variables (OLD)
+    // const currentUser = this.state.currentUser;
+    // const messages = this.state.messages;
+
+    // destructuring assignment
+    const {
+      currentUser,
+      messages
+    } = this.state;
+
+    return (
+      <div>
+        <nav className="navbar">
+          <a href="/" className="navbar-brand">Chatty</a>
+        </nav>
+        <MessageList messages={messages}/>
+        <ChatBar
+          currentUser={currentUser}
+          onNewPost={this.createMessage}
+          handler={this.handleNameChange}
+        />
+      </div>
+    );
   }
 }
 
