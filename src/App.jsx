@@ -9,37 +9,64 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: { name: ANONYMOUS }, 
-      messages: []
+      messages: [],
+      usersConnected: 0
     }
-
-    this.handleNameChange = this.handleNameChange.bind(this);
   }
 
   componentDidMount() {
+    console.log('componentDidMount <App />')
     this.socket = new WebSocket('ws://localhost:3001');
+
     this.socket.onopen = (event) => {
       console.log("Connected to server");
     }
+
     this.socket.onmessage = (event) => {
-      const newMessages = this.state.messages.concat(JSON.parse(event.data));
+      console.log(event);
+      const data = JSON.parse(event.data);
+      switch(data.type) {
+        case 'postMessage':
+          data.type = 'incomingMessage'
+          break;
+        case 'postNotification': 
+          data.type = 'incomingNotification'
+          //eventually make it so that Someone is the previous state
+          data.content = `Someone changed their name to ${data.username}`
+          break;
+        case 'newUser':
+          this.setState({
+            usersConnected: data.count
+          })
+          break;
+        case 'lostUser':
+          this.setState({
+            usersConnected: data.count
+          })
+          break;
+        default:
+          // show an error if the message type is unknown
+          throw new Error("Unknown event type " + data.type);
+      }
+
+      const newMessages = this.state.messages.concat(data);
       this.setState({
         messages: newMessages
       })
     }
   }
 
-  handleNameChange(newName) {
-    this.setState({
-      currentUser: { name: newName }
-    });
+  handleNameChange = (newName) => {
+    this.setState({ currentUser: { name: newName }})
   }
 
-  createMessage = (currentUsername, content) => {
+  createMessage = (type, currentUsername, content) => {
     let username = currentUsername;
     if (currentUsername === '') {
       username = ANONYMOUS
     }
     const newMessage = {
+      type,
       username,
       content
     }
@@ -61,6 +88,7 @@ class App extends Component {
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
+          <p className="userCount">People Online: {this.state.usersConnected}</p>
         </nav>
         <MessageList messages={messages}/>
         <ChatBar

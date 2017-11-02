@@ -15,7 +15,7 @@ class ChatBar extends Component {
   //function to handle when enter key is pressed
   onContentEnter = (event) => {
     if(event.key == 'Enter'){
-      this.props.onNewPost(this.props.currentUser.name, this.state.content)
+      this.props.onNewPost('postMessage', this.props.currentUser.name, this.state.content)
       this.setState({
         content: ''
       })
@@ -28,7 +28,7 @@ class ChatBar extends Component {
 
   onUserEnter = (event) => {
     if(event.key == 'Enter') {
-      this.props.onNewPost(this.props.currentUser.name, '');
+      this.props.onNewPost('postNotification', this.props.currentUser.name, '');
     }
   }
 
