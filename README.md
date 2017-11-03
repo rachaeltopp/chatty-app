@@ -3,6 +3,12 @@ Chatty App
 
 Chatty is a front-end web application using ReactJS. It allows you to chat using a web socket server, and send giphs by typing: /giphy + [anything you want].
 
+## Final Product
+
+![First Message](/screenshots/first-message.png?raw=true)
+![Second User](/screenshots/another-user-online?raw=true)
+![Second User Offline](/screenshots/second-user-offinline?raw=true)
+
 ## Getting Started
 
 ```
