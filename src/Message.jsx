@@ -5,7 +5,7 @@ class OlderMessage extends Component {
     return (
       <div className="message">
         <span className="message-username">{this.props.username}</span>
-        <span className="message-content">{this.props.content}</span>
+        <span className="message-content" dangerouslySetInnerHTML={{__html: this.props.content}}></span>
       </div>
     );
   }
@@ -24,7 +24,7 @@ const Message = ({ username, content }) => {
   return (
     <div className="message">
       <span className="message-username">{username}</span>
-      <span className="message-content">{content}</span>
+      <span className="message-content" dangerouslySetInnerHTML={{__html: content}}></span>
     </div>
   )
 }

@@ -1,6 +1,8 @@
 const express = require('express');
 const SocketServer = require('ws').Server;
 const uuidv4 = require('uuid/v4');
+const querystring = require('querystring');
+const fetch = require('node-fetch');
 
 // Set the port to 3001
 const PORT = 3001;
@@ -16,9 +18,9 @@ const wss = new SocketServer({ server });
 
 let userCount = 0;
 
-wss.broadcast = function broadcast(data) {
+wss.broadcast = function(data) {
   wss.clients.forEach(function(client) {
-    client.send(JSON.stringify(data));
+    client.send(data);
   });
 };
 
@@ -27,14 +29,32 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
   userCount += 1;
   const newUser = { type: 'newUser', count: userCount };
-  wss.broadcast(newUser);
+  wss.broadcast(JSON.stringify(newUser));
 
   //callback for when a client sends a message
   //parse the msg, give it an id, and broadcast the msg
   ws.on('message', (msg) => {
-    const incomingClientMessage = JSON.parse(msg);
-    incomingClientMessage.id = uuidv4();
-    wss.broadcast(incomingClientMessage);
+    var message = JSON.parse(msg);
+    message.id = uuidv4();
+
+    if (matches = message.content.match(/^\/giphy (.+)$/)) {
+    let qs = querystring.stringify({
+      api_key: 'K2hRRtWn2Ow70eNk1AYyUGBn3tlM67Vj',
+      tag: matches[1]
+      });
+    fetch(`https://api.giphy.com/v1/gifs/random?${qs}`)
+      .then( resp => {return resp.json() } )
+      .then( json => {
+        message.content = `<img src="${json.data.image_url}" alt=""/>`
+        var to_send = JSON.stringify(message);
+        wss.broadcast(to_send);
+        console.log(`Sent: ${to_send}`);
+      })
+    } else {
+      var to_send = JSON.stringify(message);
+      wss.broadcast(to_send);
+      console.log(`Sent: ${to_send}`);
+    }
   })
 
   // Set up a callback for when a client closes the socket
@@ -42,7 +62,7 @@ wss.on('connection', (ws) => {
     console.log('Client disconnected');
     userCount -= 1;
     const lostUser = { type: 'lostUser', count: userCount };
-    wss.broadcast(lostUser);
+    wss.broadcast(JSON.stringify(lostUser));
   });
 
 });
