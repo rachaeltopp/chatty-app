@@ -6,8 +6,8 @@ Chatty is a front-end web application using ReactJS. It allows you to chat using
 ## Final Product
 
 ![First Message](/screenshots/first-message.png?raw=true)
-![Second User](/screenshots/another-user-online?raw=true)
-![Second User Offline](/screenshots/second-user-offinline?raw=true)
+![Second User](/screenshots/another-user-online.png?raw=true)
+![Second User Offline](/screenshots/second-user-offline.png?raw=true)
 
 ## Getting Started
 
