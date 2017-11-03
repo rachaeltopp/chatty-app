@@ -1,45 +1,39 @@
-React Boilerplate
+Chatty App
 =====================
 
-A minimal and light dev environment for ReactJS.
+Chatty is a front-end web application using ReactJS. It allows you to chat using a web socket server, and send giphs by typing: /giphy + [anything you want].
 
-### Usage
-
-Clone the boilerplate and create your own git repo.
+## Getting Started
 
 ```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
+1. Fork this repository, then clone your fork of this repository.
+2. Install dependencies using the `npm install` command in the chatty-app, then again in the chatty_server sub-directory.
+3. Compile the client side code using `npm start` from the chatty-app main-directory.
+4. Start the web server using the `npm start` command from the chatty_server sub-directory. The app will be served at <http://localhost:3000/>.
+5. Go to <http://localhost:3000/> in your browser.
 ```
 
-Install the dependencies and start the server.
+### Chatty-App Dependencies
 
-```
-npm install
-npm start
-open http://localhost:3000
-```
+* react
+* react-dom
+* webpack
+* webpack-dev-server
+* babel-core
+* babel-loader
+* babel-preset-es2015
+* babel-preset-react
+* babel-preset-stage-0
+* css-loader
+* node-sass
+* sass-loader
+* sockjs-client
+* style-loader
 
-### Static Files
+## Chatty_Server Dependencies
 
-You can store static files like images, fonts, etc in the `build` folder.
-
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
-
-```
-npm run lint
-```
-
-### Dependencies
-
-* React
-* Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+* express
+* ws
+* uuid
+* node-fetch
+* query-string
