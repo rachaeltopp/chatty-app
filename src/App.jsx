@@ -15,7 +15,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount <App />')
     this.socket = new WebSocket('ws://localhost:3001');
 
     this.socket.onopen = (event) => {
@@ -23,7 +22,6 @@ class App extends Component {
     }
 
     this.socket.onmessage = (event) => {
-      console.log(event);
       const data = JSON.parse(event.data);
       switch(data.type) {
         case 'postMessage':
@@ -74,10 +72,6 @@ class App extends Component {
   }
 
   render() {
-    // assigning state to local variables (OLD)
-    // const currentUser = this.state.currentUser;
-    // const messages = this.state.messages;
-
     // destructuring assignment
     const {
       currentUser,

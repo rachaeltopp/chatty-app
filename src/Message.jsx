@@ -1,24 +1,4 @@
-import React, {Component} from 'react';
-
-class OlderMessage extends Component {
-  render() {
-    return (
-      <div className="message">
-        <span className="message-username">{this.props.username}</span>
-        <span className="message-content" dangerouslySetInnerHTML={{__html: this.props.content}}></span>
-      </div>
-    );
-  }
-}
-
-const OldMessage = (props) => {
-  return (
-    <div className="message">
-      <span className="message-username">{props.username}</span>
-      <span className="message-content">{props.content}</span>
-    </div>
-  )
-}
+import React from 'react';
 
 const Message = ({ username, content }) => {
   return (

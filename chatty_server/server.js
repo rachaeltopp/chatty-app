@@ -48,12 +48,10 @@ wss.on('connection', (ws) => {
         message.content = `<img src="${json.data.image_url}" alt=""/>`
         var to_send = JSON.stringify(message);
         wss.broadcast(to_send);
-        console.log(`Sent: ${to_send}`);
       })
     } else {
       var to_send = JSON.stringify(message);
       wss.broadcast(to_send);
-      console.log(`Sent: ${to_send}`);
     }
   })
 

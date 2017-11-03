@@ -12,7 +12,7 @@ class ChatBar extends Component {
     this.setState({content: event.target.value});
   }
 
-  //function to handle when enter key is pressed
+  //function to handle when enter key is pressed in message field
   onContentEnter = (event) => {
     if(event.key == 'Enter'){
       this.props.onNewPost('postMessage', this.props.currentUser.name, this.state.content)
@@ -25,7 +25,8 @@ class ChatBar extends Component {
   onUserContent = (event) => {
     this.props.handler(event.target.value);
   }
-
+  
+  //function to handle when enter key is pressed in name field
   onUserEnter = (event) => {
     if(event.key == 'Enter') {
       this.props.onNewPost('postNotification', this.props.currentUser.name, '');
